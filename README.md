@@ -5,3 +5,8 @@ This project sets out to implement a generic image classification library that c
 Requirements:
 
 - sklearn
+
+
+## Installation:
+
+To install the library, one must have a running Ubuntu or Debian-based environment and run __install_dependencies.sh__
