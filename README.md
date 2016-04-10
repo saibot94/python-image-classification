@@ -4,6 +4,8 @@ This project sets out to implement a generic image classification library that c
 
 Requirements:
 
+- numpy
+- scipy
 - sklearn
 
 
