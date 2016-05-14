@@ -10,6 +10,14 @@ Requirements:
 - sklearn
 
 
-## Installation:
+#### Installation:
 
-To install the library, one must have a running Ubuntu or Debian-based environment and run __install_dependencies.sh__
+To install the library, one must have a running Ubuntu or Debian-based environment and run __install_dependencies.sh__.
+
+The install script works if you start by creating a virtual environment, by doing the following:
+	- sudo apt-get install virtualenv
+	- virtualenv --system-site-packages virtualenv
+
+After that, run __install_library.sh__ and you will have the __imclas__ package built in the library.
+
+

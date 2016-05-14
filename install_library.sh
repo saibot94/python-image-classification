@@ -7,4 +7,4 @@ SOURCE_DIR=./virtualenv/bin/activate
 # Install script
 source ${SOURCE_DIR} && \
     python setup.py bdist_wheel && \
-    pip install --upgrade dist/imclas-*
+    pip install -r requirements.txt --upgrade dist/imclas-*

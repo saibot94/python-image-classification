@@ -1,7 +1,7 @@
-from imclas.examples.regression import RegressionExample
+from imclas.examples.digit_recognition import DigitRecognitionExample
+
 
 def run():
-    reg = RegressionExample()
-    reg.run()
-
+    rec = DigitRecognitionExample()
+    rec.run()
 
