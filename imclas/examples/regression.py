@@ -10,3 +10,8 @@ class RegressionExample():
         clf = LinearRegression()
         arr = np.array([1, 2, 3, 4])
         print arr
+
+
+if __name__ == '__main__':
+    reg = RegressionExample()
+    reg.run()
