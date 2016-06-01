@@ -1,6 +1,4 @@
-from setuptools import setup
-
-
+from setuptools import setup, find_packages
 
 setup(name='imclas',
       version='0.1',
@@ -8,7 +6,6 @@ setup(name='imclas',
       author='Cristian Schuszter',
       author_email='chrisschuszter@gmail.com',
       url='https://www.python.org/sigs/distutils-sig/',
-      packages=['imclas','imclas.examples'],
+      packages=find_packages(),
       requires=["sklearn", "numpy", "matplotlib"]
-     )
-
+      )

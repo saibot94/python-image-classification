@@ -1,5 +1,6 @@
 import requests, base64, urllib
-#import imclas.configuration as conf
+from imclas import configuration as conf
+
 
 class ImageCollecter:
     def __init__(self, api_key, base_url):
@@ -11,8 +12,8 @@ class ImageCollecter:
         if query:
             query = "\'" + query + "\'"
             to_encode = {
-                'Query' : query,
-                '$format' : 'json'
+                'Query': query,
+                '$format': 'json'
             }
             encoded_query = urllib.urlencode(to_encode)
             url = self.base_url + '?' + encoded_query
@@ -22,11 +23,13 @@ class ImageCollecter:
 
 
 if __name__ == '__main__':
-    apiKey = '<YOUR_API_KEY>'
+    apiKey = conf.API_KEY
     base_url = 'https://api.datamarket.azure.com/Bing/Search/v1/Image'
     ic = ImageCollecter(api_key=apiKey, base_url=base_url)
 
     res = ic.execute_query('xbox')
     if res is not None:
+        next_url = res['d']['__next']
+        print "Next url: %s" % next_url
         for result in res['d']['results']:
             print result['MediaUrl']

@@ -14,6 +14,9 @@ Requirements:
 
 To install the library, one must have a running Ubuntu or Debian-based environment and run __install_dependencies.sh__.
 
+You can also install it on Windows, providing you install the above libraries before running __instsall_library.cmd__.
+I suggest not using virtualenvs when installing on windows.
+
 The install script works if you start by creating a virtual environment, by doing the following:
 	- sudo apt-get install virtualenv
 	- virtualenv --system-site-packages virtualenv
