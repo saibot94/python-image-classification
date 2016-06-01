@@ -22,7 +22,7 @@ class ImageCollecter:
 
 
 if __name__ == '__main__':
-    apiKey = 'hbkeqj0wjrL1kIO0bE/s6z2I77jIr/jD+RV7O1fzr5I'
+    apiKey = '<YOUR_API_KEY>'
     base_url = 'https://api.datamarket.azure.com/Bing/Search/v1/Image'
     ic = ImageCollecter(api_key=apiKey, base_url=base_url)
 
