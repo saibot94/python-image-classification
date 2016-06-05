@@ -12,7 +12,6 @@ def sift_finder():
 
     # a keypoint contains the following: angle, class_id, octave, pt, response, size
     # for each keypoint there's going to be computed an 128 long feature vector (descriptor)
-    print(kp[0])
 
     original_img = cv2.imread('home.jpg')
     original_img = cv2.cvtColor(original_img, cv2.COLOR_BGR2RGB)
