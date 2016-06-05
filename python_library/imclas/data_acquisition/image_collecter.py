@@ -24,8 +24,8 @@ class ImageCollecter:
 
 if __name__ == '__main__':
     apiKey = conf.API_KEY
-    base_url = 'https://api.datamarket.azure.com/Bing/Search/v1/Image'
-    ic = ImageCollecter(api_key=apiKey, base_url=base_url)
+    url = 'https://api.datamarket.azure.com/Bing/Search/v1/Image'
+    ic = ImageCollecter(api_key=apiKey, base_url=url)
 
     res = ic.execute_query('xbox')
     if res is not None:
