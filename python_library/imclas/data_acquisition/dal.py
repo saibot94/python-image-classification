@@ -25,7 +25,7 @@ class DAL:
             Inserts a number of rows in the table
             Params:
             - table : name of the table to insert values into
-            - values : list of tuples to be inserted
+           z - values : list of tuples to be inserted
         """
         c = self.conn.cursor()
         fields = self._get_nr_of_fields(values[0])

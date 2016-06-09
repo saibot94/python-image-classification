@@ -1,6 +1,18 @@
 import requests, base64, urllib
 import collections
 from imclas import configuration as conf
+from imclas.util import ImageUtils
+import urllib
+import os
+from threading import Thread
+import cv2
+from time import sleep
+
+
+def chunks(l, n):
+    """Yield successive n-sized chunks from l."""
+    for i in xrange(0, len(l), n):
+        yield l[i:i + n]
 
 
 class ImageCollector:
@@ -8,6 +20,55 @@ class ImageCollector:
         self.api_key = api_key
         self.base_url = base_url
         self.headers = {'Authorization': 'Basic ' + base64.b64encode(self.api_key + ':' + self.api_key)}
+
+    def _do_parallel_download(self, arg):
+        i = arg['image_nr']
+        origin = i
+        for image_url in arg['chunk']:
+            url_extension = '.jpg'
+            image_name = arg['col_name'] + str(i) + url_extension
+            full_image_path = arg['path'] + image_name
+            urllib.urlretrieve(image_url, full_image_path)
+            sleep(0.5)
+            try:
+                res_img = ImageUtils.resize_image(full_image_path, 300, 300)
+                cv2.imwrite(full_image_path, res_img)
+            except Exception as e:
+                print "Error on image {}".format(image_name)
+                os.remove(full_image_path)
+            i += 1
+        print 'Thread for argument {} is done'.format(origin)
+
+    def _create_image_download_thread(self, chunk, collection_name, image_nr):
+        return Thread(target=self._do_parallel_download,
+                      args=({'chunk': chunk,
+                             'col_name': collection_name,
+                             'path': conf.COLLECTIONS_DIR + '\\' + collection_name + '\\',
+                             'image_nr': image_nr},))
+
+    def download_all(self, urls, collection_name):
+        """
+        Given a list of image urls, download them to the disk and add them to the database
+        """
+        sys_collection_path = conf.COLLECTIONS_DIR + '\\' + collection_name
+        if not os.path.exists(sys_collection_path):
+            os.makedirs(sys_collection_path)
+
+        print urls
+        to_process = list(chunks(list(urls), 10))
+        threads = collections.deque()
+        i = 0
+        for chunk in to_process:
+            thread = self._create_image_download_thread(chunk, collection_name, i)
+            threads.append(thread)
+
+            i += 10
+
+        for th in threads:
+            th.start()
+
+        for th in threads:
+            th.join()
 
     def get_image_urls(self, query, nr_of_urls):
         query_result = self.execute_query(query)
