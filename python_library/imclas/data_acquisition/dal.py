@@ -97,6 +97,22 @@ class DAL:
     def drop_table(self, table_name):
         self.execute_query('drop table ' + table_name)
 
+    def get_collections(self):
+        return self.execute_query('select * from collections')
+
+    def remove_collection(self, collection_name):
+        id = self.get_collection_id(collection_name)
+        if id is not None:
+            self.execute_query('delete from collection_items where collection_id=' + str(id))
+            self.execute_query('delete from collections where id=' + str(id))
+        else:
+            raise Exception('Collection does not exist')
+
+    def get_classifier_with_name(self, name):
+        self.execute_query('create table if not exists classifiers \
+                             (name TEXT NOT NULL PRIMARY KEY, path TEXT NOT NULL, type TEXT NOT NULL)')
+
+        return self.execute_query()
 
 if __name__ == '__main__':
     d = DAL()
