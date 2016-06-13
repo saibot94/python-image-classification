@@ -1,6 +1,8 @@
 import sqlite3
 import imclas.configuration as conf
 import collections
+import os
+import cPickle
 
 
 class DAL:
@@ -108,11 +110,34 @@ class DAL:
         else:
             raise Exception('Collection does not exist')
 
-    def get_classifier_with_name(self, name):
+    def _create_classifiers_if_not_exists(self):
+        if not os.path.exists(conf.MODELS_DIR):
+            os.makedirs(conf.MODELS_DIR)
+        self.execute_query('create table if not exists classifier_types \
+            (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL)')
         self.execute_query('create table if not exists classifiers \
-                             (name TEXT NOT NULL PRIMARY KEY, path TEXT NOT NULL, type TEXT NOT NULL)')
+                             (name TEXT NOT NULL PRIMARY KEY, path TEXT NOT NULL, type TEXT NOT NULL, \
+                             classifier_type_id INTEGER NOT NULL, \
+                             FOREIGN KEY(classifier_type_id) REFERENCES classifier_types(id))')
 
-        return self.execute_query()
+    def get_classifier_type_id(self, clf_type):
+        res = self.execute_query('select id from classifier_types where name ="' + clf_type + '"')
+        if len(res) > 0:
+            return res[0][0]
+
+    def get_classifier(self, name, clf_type):
+        self._create_classifiers_if_not_exists()
+        id = self.get_classifier_type_id(clf_type)
+        if id is not None:
+            query_res = self.execute_query('select * from classifiers where name="' + name + '" \
+                                            and classifier_type_id=' + id)
+            if len(query_res) > 0:
+                return query_res[0][0]
+
+    def persist_classifier(self, clf_object, model_name, clf_type):
+        self._create_classifiers_if_not_exists()
+        existing_classifier = self.get_classifier(model_name, clf_type)
+
 
 if __name__ == '__main__':
     d = DAL()

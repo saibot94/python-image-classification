@@ -17,7 +17,9 @@ class SVMClassifierBuilder:
             collection_features.extend(self.feature_extractor.extract_features_from_collection(collection_items))
 
         k_means_clf = KMeans(n_jobs=-1, n_clusters=number_of_clusters)
-        k_means_clf.fit(collection_features)
+        k_means_clf.fit(list(collection_features))
+
+        self.dal.persist_classifier(k_means_clf, model_name, 'kmeans')
 
         return k_means_clf
 
@@ -45,7 +47,7 @@ class SVMClassifierBuilder:
             return
 
         model_name = '~'.join(collections)
-        self.dal.get_classifier_with_name(model_name)
+        self.dal.get_classifier(model_name, 'kmeans')
         # Step 1: extract features and create KMeans classifier
         k_means_clf = self._build_kmeans_classifier(number_of_clusters,
                                                     collections,
