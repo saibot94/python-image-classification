@@ -114,11 +114,14 @@ class DAL:
         if not os.path.exists(conf.MODELS_DIR):
             os.makedirs(conf.MODELS_DIR)
         self.execute_query('create table if not exists classifier_types \
-            (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL)')
+            (id INTEGER PRIMARY KEY AUTOINCREMENT, \
+             name TEXT NOT NULL)')
         self.execute_query('create table if not exists classifiers \
-                             (name TEXT NOT NULL PRIMARY KEY, path TEXT NOT NULL, type TEXT NOT NULL, \
-                             classifier_type_id INTEGER NOT NULL, \
-                             FOREIGN KEY(classifier_type_id) REFERENCES classifier_types(id))')
+                             (id INTEGER PRIMARY KEY AUTOINCREMENT, \
+                              name TEXT NOT NULL, \
+                              path TEXT NOT NULL, \
+                              classifier_type_id INTEGER NOT NULL, \
+                              FOREIGN KEY(classifier_type_id) REFERENCES classifier_types(id))')
 
     def get_classifier_type_id(self, clf_type):
         res = self.execute_query('select id from classifier_types where name ="' + clf_type + '"')
@@ -130,13 +133,45 @@ class DAL:
         id = self.get_classifier_type_id(clf_type)
         if id is not None:
             query_res = self.execute_query('select * from classifiers where name="' + name + '" \
-                                            and classifier_type_id=' + id)
+                                            and classifier_type_id=' + str(id))
             if len(query_res) > 0:
-                return query_res[0][0]
+                return query_res[0]
+        else:
+            self.create_classifier_type(clf_type)
+
+    def create_classifier_type(self, clf_type):
+        self.execute_query('insert into classifier_types(name) values ("' + clf_type + '")')
+
+    def remove_classifier(self, model_name, clf_type):
+        clf = self.get_classifier(model_name, clf_type)
+        if clf:
+            if os.path.exists(clf[2]):
+                os.remove(clf[2])
+            self.execute_query('delete from classifiers where name="' + model_name + '" \
+                                    and classifier_type_id=' + str(clf[3]))
+            return 'OK'
 
     def persist_classifier(self, clf_object, model_name, clf_type):
         self._create_classifiers_if_not_exists()
         existing_classifier = self.get_classifier(model_name, clf_type)
+        if existing_classifier is not None:
+            self.remove_classifier(model_name, clf_type)
+
+        # Now create the file for the model and save it in the db
+        type_id = self.get_classifier_type_id(clf_type)
+        model_path = conf.MODELS_DIR + '\\' + model_name + '_' + clf_type + '.model'
+        with open(model_path, 'w') as f:
+            cPickle.dump(clf_object, f)
+
+        self.execute_query('insert into classifiers(name, path, classifier_type_id) \
+                            values ("' + model_name + '", "' + model_path + '", ' + str(type_id) + ') ')
+
+    def load_classifier_object(self, model_name, clf_type):
+        clf = self.get_classifier(model_name, clf_type)
+        path = clf[2]
+        if clf and os.path.exists(path):
+            with open(path, 'r') as f:
+                return cPickle.load(f)
 
 
 if __name__ == '__main__':

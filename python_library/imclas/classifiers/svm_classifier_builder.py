@@ -52,3 +52,9 @@ class SVMClassifierBuilder:
         k_means_clf = self._build_kmeans_classifier(number_of_clusters,
                                                     collections,
                                                     model_name)
+
+        # Step 2: split into train - test data all of the classes
+
+        # Step 3: generate histograms for all of the images
+
+        # Step 4: create the classifier and then validate it + get metrics
