@@ -18,8 +18,9 @@ You can also install it on Windows, providing you install the above libraries be
 I suggest not using virtualenvs when installing on windows.
 
 The install script works if you start by creating a virtual environment, by doing the following:
-	- sudo apt-get install virtualenv
-	- virtualenv --system-site-packages virtualenv
+
+* sudo apt-get install virtualenv
+* virtualenv --system-site-packages virtualenv
 
 After that, run __install_library.sh__ and you will have the __imclas__ package built in the library.
 

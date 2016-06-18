@@ -2,6 +2,8 @@ import cv2
 from collections import deque
 from multiprocessing.pool import ThreadPool
 from imclas.util import array_utils
+import collections
+import numpy as np
 
 
 class FeatureExtractor:
@@ -33,10 +35,20 @@ class FeatureExtractor:
 
         q = deque()
         for item in collection_items:
-            async_results.append(pool.apply_async(self.perform_sift, (item, )))
+            async_results.append(pool.apply_async(self.perform_sift, (item,)))
 
         for result in async_results:
             async_response = result.get()
             if async_response is not None:
                 q.extend(async_response)
         return q
+
+    def extract_histograms_from_features(self, classifier, images, nr_of_bins=50):
+        zrs = collections.deque()
+        for image in images:
+            image = self.perform_sift(image)
+            if image is not None:
+                zr = classifier.predict(image)
+                hist, bin_edges = np.histogram(zr, bins=nr_of_bins, density=True)
+                zrs.append(hist)
+        return zrs
