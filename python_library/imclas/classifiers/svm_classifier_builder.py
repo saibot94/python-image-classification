@@ -3,7 +3,7 @@ from imclas.features import FeatureExtractor
 import numpy as np
 from collections import deque
 from sklearn.cluster import KMeans
-from sklearn.svm import SVC
+from sklearn.svm import SVC, LinearSVC
 import math
 from sklearn.cross_validation import train_test_split
 
@@ -12,6 +12,32 @@ class SVMClassifierBuilder:
     def __init__(self):
         self.dal = DAL()
         self.feature_extractor = FeatureExtractor()
+
+    def score_model(self, model, X_test, y_test):
+        """
+        Score a model with some test data
+        Parameters
+        ----------
+        model : The model to be scored
+        X_test : The test values
+        y_test : The correct "answers"
+
+        Returns
+        -------
+        A dictionary with three elements: score (the score), y_true (the test labels), y_predict( the predicted values)
+        """
+        correct = 0
+        y_predict = []
+        for i in xrange(len(X_test)):
+            prediction = model.predict([X_test[i]])[0]
+            if prediction == y_test[i]:
+                correct += 1
+            y_predict.append(prediction)
+        print correct
+        print len(X_test)
+        return {'score': float(len(X_test)) / float(correct),
+                'y_true': y_test,
+                'y_predict': y_predict}
 
     def _build_kmeans_classifier(self, number_of_clusters, collections, model_name):
         collection_features = deque()
@@ -26,7 +52,7 @@ class SVMClassifierBuilder:
 
         return k_means_clf
 
-    def build_model(self, collections, number_of_clusters=50, train_percentage=0.8):
+    def build_model(self, collections, number_of_clusters=50, train_percentage=0.5, svm_type='linear'):
         """
         This function creates the KMeans classifier and
         SVM classifiers (afterwards).
@@ -36,6 +62,8 @@ class SVMClassifierBuilder:
 
         number_of_clusters :param
         how many clusters to create for the file
+
+        svm_type: can be 'linear' or 'classic'
         """
 
         if len(collections) < 2:
@@ -83,15 +111,20 @@ class SVMClassifierBuilder:
 
         # Step 4: create the classifier and then validate it + get metrics
         print '==> Step 4: Creating the classifier and doing some metrics'
-        svm_classifier = SVC(probability=True)
+        if svm_type == 'classic':
+            svm_classifier = SVC(probability=True)
+        else:
+            svm_classifier = LinearSVC()
         svm_classifier.fit(X_train, y_train)
-        mean_score = svm_classifier.score(X_test, y_test)
 
         self.dal.persist_classifier(svm_classifier, model_name, 'svm')
 
-        print "The mean score for this test was: %f" % mean_score
+        model_score_result = self.score_model(svm_classifier, X_test, y_test)
+
+        print "The mean score for this test was: %f" % model_score_result['score']
+        print svm_classifier.score(X_test, y_test)
 
 
 if __name__ == '__main__':
     svm = SVMClassifierBuilder()
-    svm.build_model(['stop signs', 'no left turn signs'], train_percentage=0.8)
+    svm.build_model(['stop signs', 'no left turn signs'], train_percentage=0.6)

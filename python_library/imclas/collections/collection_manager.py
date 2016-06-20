@@ -32,7 +32,6 @@ class CollectionManager:
         else:
             raise Exception('Collection does not exist!')
 
-
     def add_paths_to_db(self, collection_path, collection_name):
         for item in os.listdir(collection_path):
             full_path = collection_path + '\\' + item
