@@ -2,8 +2,33 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-md-10 col-md-push-2">
+            <div class="col-md-10 col-md-push-1">
                 <h2>Collections</h2>
+                <hr>
+            </div>
+            <div class="col-md-10 col-md-push-1">
+                <div ng-repeat="collection in vm.collections">
+                    <div class="collection-border">
+                        <h3>
+                            <span ng-click="vm.collapsed[collection.name] = !vm.collapsed[collection.name]">
+                            <span ng-if="vm.collapsed[collection.name]"
+                                  class="glyphicon glyphicon-chevron-right"></span>
+                                <span ng-if="!vm.collapsed[collection.name]"
+                                      class="glyphicon glyphicon-chevron-down"></span>
+                                {{collection.name}}
+                            </span>
+                            <button class="btn btn-danger pull-right">Delete collection</button>
+                        </h3>
+
+
+                    </div>
+                    <div class="collection-body" ng-if="!vm.collapsed[collection.name]">
+                        <div ng-repeat="item in collection.items" class="col-md-4">
+                            <img ng-src="{{vm.getImage(item)}}" >
+                        </div>
+                    </div>
+                    <br>
+                </div>
             </div>
         </div>
     </div>

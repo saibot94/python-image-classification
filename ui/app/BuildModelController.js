@@ -2,8 +2,8 @@
     angular.module('SrcApp')
         .controller('BuildModelController', BuildModelController);
 
-    DangerZonesController.$inject = []
-    function DangerZonesController(){
+    BuildModelController.$inject = []
+    function BuildModelController(){
         var vm = this;
     }
 
