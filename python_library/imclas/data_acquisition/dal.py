@@ -63,6 +63,9 @@ class DAL:
         self.execute_query('create table if not exists collection_items (collection_id INTEGER NOT NULL, \
                             item_path TEXT NOT NULL PRIMARY KEY, FOREIGN KEY(collection_id) REFERENCES collection(id))')
 
+    def remove_collection_item(self, item_name):
+        self.execute_query('delete from collection_items where item_path="' + item_name + '"')
+
     def _create_collection_for_name(self, collection_name):
         self.execute_query('insert into collections(collection_name) values ("' + collection_name + '")')
 

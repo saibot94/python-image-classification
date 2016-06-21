@@ -17,9 +17,20 @@ def get_collections():
     return jsonify(result=collections_result)
 
 
-@mod_collections.route('/get_image')
+@mod_collections.route('/image', methods=['GET'])
 def get_collection_image():
     name = request.args.get('name')
     if os.path.exists(name):
         return send_file(name, mimetype='image/jpeg')
     return 'Not found!'
+
+
+@mod_collections.route('/image', methods=['DELETE'])
+def delete_image():
+    name = request.args.get('name')
+    if os.path.exists(name):
+        os.remove(name)
+        d = DAL()
+        d.remove_collection_item(name)
+        return jsonify(res={'message': 'ok'})
+    return jsonify(res={'message': 'not found'})

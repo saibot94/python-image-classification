@@ -218,3 +218,17 @@ text-align: center;
     overflow: auto;
     border: 1px solid gray;
 }
+
+.remove-image{
+    max-width: 50px;
+    position: absolute;
+    opacity: 0.8;
+    max-height: 50px;
+    display: none;
+    }
+
+.collection-item:hover > .remove-image {
+    display: inline;
+    cursor: pointer;
+    right: 0;
+}

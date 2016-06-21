@@ -23,8 +23,10 @@
 
                     </div>
                     <div class="collection-body" ng-if="!vm.collapsed[collection.name]">
-                        <div ng-repeat="item in collection.items" class="col-md-4">
-                            <img ng-src="{{vm.getImage(item)}}" >
+                        <div ng-repeat="item in collection.items" class="col-md-4 collection-item">
+                            <img ng-click="vm.removeImage(item, collection.name)" src="/img/x_image.png" class="remove-image"
+                                 alt="Remove image">
+                            <img ng-src="{{vm.getImage(item)}}">
                         </div>
                     </div>
                     <br>
