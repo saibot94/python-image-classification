@@ -9,7 +9,9 @@
             var service = {
                 GetCollections: getCollections,
                 GetImage: getImage,
-                RemoveImage: removeImage
+                RemoveImage: removeImage,
+                DeleteCollection: deleteCollection,
+                CreateCollection: createCollection
             }
 
             return service;
@@ -32,6 +34,21 @@
                     method: 'DELETE',
                     url: baseUrl + '/image',
                     params: {name: imagePath}
+                });
+            }
+
+            function deleteCollection(collectionName){
+                return $http({
+                    method: 'DELETE',
+                    url: baseUrl + '/' + collectionName
+                });
+            }
+
+            function createCollection(name, query, nrResults){
+                return $http({
+                    method: 'POST',
+                    url: baseUrl + '/' + encodeURIComponent(name) + '/' +
+                             encodeURIComponent(query) + '/' + encodeURIComponent(nrResults)
                 });
             }
 		}

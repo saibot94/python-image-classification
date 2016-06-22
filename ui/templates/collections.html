@@ -1,5 +1,6 @@
+<img src="img/loading.gif" alt="Loading..." ng-show="vm.showLoadingGif"
+     class="loading-spinner">
 <div class="row">
-
     <div class="container">
         <div class="row">
             <div class="col-md-10 col-md-push-1">
@@ -17,20 +18,45 @@
                                       class="glyphicon glyphicon-chevron-down"></span>
                                 {{collection.name}}
                             </span>
-                            <button class="btn btn-danger pull-right">Delete collection</button>
+                            <button class="btn btn-danger pull-right" ng-click="vm.deleteCollection(collection.name)">
+                                Delete collection
+                            </button>
                         </h3>
 
 
                     </div>
                     <div class="collection-body" ng-if="!vm.collapsed[collection.name]">
                         <div ng-repeat="item in collection.items" class="col-md-4 collection-item">
-                            <img ng-click="vm.removeImage(item, collection.name)" src="/img/x_image.png" class="remove-image"
+                            <img ng-click="vm.removeImage(item, collection.name)" src="/img/x_image.png"
+                                 class="remove-image"
                                  alt="Remove image">
                             <img ng-src="{{vm.getImage(item)}}">
                         </div>
                     </div>
                     <br>
                 </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-5 col-md-push-1">
+                <h2>Create new collection</h2>
+                <hr>
+                <form class="form" role="form" ng-submit="vm.createCollection()">
+                    <div class="form-group">
+                        <label for="email">Collection name:</label>
+                        <input type="text" ng-model="vm.formOptions.collectionName" class="form-control" id="email">
+                    </div>
+                    <div class="form-group">
+                        <label for="pwd">Query:</label>
+                        <input type="text" ng-model="vm.formOptions.query" class="form-control" id="pwd">
+                    </div>
+                    <div class="form-group">
+                        <label for="nritems">Number of results:</label>
+                        <input id="nritems" ng-model="vm.formOptions.numberOfResults" class="form-control"
+                               type="number">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </form>
             </div>
         </div>
     </div>

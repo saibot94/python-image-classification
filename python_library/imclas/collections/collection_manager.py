@@ -26,7 +26,10 @@ class CollectionManager:
         if coll_id is not None:
             collection_items = self.dal.get_items_in_collection(collection_name)
             for item in collection_items:
-                os.remove(item)
+                try:
+                    os.remove(item)
+                except Exception as e:
+                    print '[err] {}'.format(e)
 
             self.dal.remove_collection(collection_name)
         else:

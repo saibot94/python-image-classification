@@ -9,6 +9,7 @@ import cv2
 from imclas.data_acquisition.dal import DAL
 from imclas.util import array_utils
 
+
 class ImageCollector:
     def __init__(self, api_key=conf.API_KEY, base_url=conf.SEARCH_SERVICE_BASE_URL):
         self.dal = DAL()
@@ -37,12 +38,12 @@ class ImageCollector:
         print 'Thread for argument {} is done'.format(origin)
 
     @staticmethod
-    def _create_image_download_thread(chunk, collection_name, image_nr):
-        return Thread(target=ImageCollector._do_parallel_download,
-                      args=({'chunk': chunk,
-                             'col_name': collection_name,
-                             'path': conf.COLLECTIONS_DIR + '\\' + collection_name + '\\',
-                             'image_nr': image_nr},))
+    def _download_chunk(chunk, collection_name, image_nr):
+        ImageCollector._do_parallel_download(
+            {'chunk': chunk,
+             'col_name': collection_name,
+             'path': conf.COLLECTIONS_DIR + '\\' + collection_name + '\\',
+             'image_nr': image_nr})
 
     def download_all(self, urls, collection_name):
         """
@@ -53,19 +54,10 @@ class ImageCollector:
             os.makedirs(sys_collection_path)
         try:
             to_process = list(array_utils.chunks(list(urls), 10))
-            threads = collections.deque()
             i = 0
             for chunk in to_process:
-                thread = ImageCollector._create_image_download_thread(chunk, collection_name, i)
-                threads.append(thread)
-
+                ImageCollector._download_chunk(chunk, collection_name, i)
                 i += 10
-
-            for th in threads:
-                th.start()
-
-            for th in threads:
-                th.join()
 
             return sys_collection_path
         except Exception as e:

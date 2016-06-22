@@ -6,13 +6,11 @@
     function CollectionsController(ApiCollectionsService){
         var vm = this;
         vm.collapsed = [];
+        vm.formOptions = {};
+        vm.showLoadingGif = false;
 
-        ApiCollectionsService.GetCollections().then(function(response){
-            vm.collections = response.data.result
-            angular.forEach(vm.collections, function(col){
-                vm.collapsed[col.name] = true;
-            });
-        });
+        // Init phase
+        getCollections();
 
         vm.getImage = function(imagePath){
             return ApiCollectionsService.GetImage(imagePath);
@@ -26,6 +24,40 @@
                         collection.items.splice(indexOfImage, 1);
                     }
                 });
+            });
+        }
+
+        vm.deleteCollection = function(name){
+            ApiCollectionsService.DeleteCollection(name).then(function(res){
+                getCollections();
+            });
+        }
+
+        vm.createCollection = function(){
+            vm.showLoadingGif = true;
+            if(vm.formOptions.numberOfResults == 0){
+                vm.formOptions.numberOfResults = 200;
+            }
+            var name = vm.formOptions.collectionName;
+            var query = vm.formOptions.query;
+            var nrResults = vm.formOptions.numberOfResults;
+
+            ApiCollectionsService.CreateCollection(name, query, nrResults).then(function(res){
+                console.log(res);
+                getCollections();
+            });
+
+        }
+
+
+        function getCollections(){
+            vm.showLoadingGif = true;
+            ApiCollectionsService.GetCollections().then(function(response){
+                vm.collections = response.data.result
+                angular.forEach(vm.collections, function(col){
+                    vm.collapsed[col.name] = true;
+                });
+                vm.showLoadingGif = false;
             });
         }
     }
