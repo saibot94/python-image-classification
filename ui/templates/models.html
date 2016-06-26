@@ -1,9 +1,26 @@
+<img src="img/loading.gif" alt="Loading..." ng-show="vm.showLoadingGif"
+     class="loading-spinner">
 <div class="row">
-
     <div class="container">
         <div class="row">
-            <div class="col-md-10 col-md-push-2">
+            <div class="col-md-10 col-md-push-1">
                 <h2>Models</h2>
+                <p>Here you can see the various models that have been created, you can use them to classifiy a new
+                    object passed as input</p>
+                <hr>
+            </div>
+            <div class="col-md-10 col-md-push-1">
+                <div ng-repeat="model in vm.models">
+                    <div class="collection-border" style="width: 100%; height: 40px;margin-bottom: 10px;">
+                        <span style="padding: 10px;"><b>{{model.name}}</b>
+                                <button class="btn btn-danger pull-right" ng-click="vm.deleteModel(model.name)">
+                                    Delete model
+                                </button>
+                        </span>
+
+                    </div>
+
+                </div>
             </div>
         </div>
     </div>

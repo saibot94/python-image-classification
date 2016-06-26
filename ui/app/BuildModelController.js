@@ -2,8 +2,8 @@
     angular.module('SrcApp')
         .controller('BuildModelController', BuildModelController);
 
-    BuildModelController.$inject = ['ApiCollectionsService', 'ApiModelsService'];
-    function BuildModelController(ApiCollectionsService, ApiModelsService){
+    BuildModelController.$inject = ['ApiCollectionsService', 'ApiModelsService', '$location'];
+    function BuildModelController(ApiCollectionsService, ApiModelsService, $location){
         var vm = this;
         vm.modelRequest = {
             type: 'svc',
@@ -22,7 +22,6 @@
 
         getCollections();
 
-
         vm.buildModel = function(){
             vm.showLoadingGif = true;
             angular.forEach(vm.collections, function(collection){
@@ -33,6 +32,8 @@
 
             ApiModelsService.CreateModel(vm.modelRequest).then(function(response){
                 vm.showLoadingGif = false;
+                console.log(response.data);
+                $location.path('/models');
             });
         }
         function getCollections(){

@@ -25,9 +25,20 @@ def get_models():
         svm_builder = SVMClassifierBuilder()
         model_object = request.json
 
-        svm_builder.build_model(collections=model_object['collections'],
-                                number_of_clusters=model_object['clusters'],
-                                train_percentage=float(model_object['trainPercentage']),
-                                svm_type=model_object['type'])
+        result = svm_builder.build_model(collections=model_object['collections'],
+                                         number_of_clusters=model_object['clusters'],
+                                         train_percentage=float(model_object['trainPercentage']),
+                                         svm_type=model_object['type'])
 
-        return jsonify(result={'message': "ok"})
+        return jsonify(result=result)
+
+
+@mod_models.route('/<name>', methods=['DELETE'])
+def delete_model(name):
+    d = DAL()
+    try:
+        d.remove_classifier(name, 'kmeans')
+        d.remove_classifier(name, 'svm')
+        return jsonify({'message': 'ok'})
+    except Exception as e:
+        return jsonify({'error': e})

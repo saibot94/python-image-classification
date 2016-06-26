@@ -1,11 +1,9 @@
 from imclas.data_acquisition import DAL
 from imclas.features import FeatureExtractor
-import numpy as np
 from collections import deque
 from sklearn.cluster import KMeans
 from sklearn.svm import SVC, LinearSVC
 import math
-from sklearn.cross_validation import train_test_split
 from sklearn.metrics.pairwise import chi2_kernel
 
 
@@ -19,6 +17,13 @@ def create_svc_with_params(svm_type, svm_gamma, kernel_type):
         svm_classifier = LinearSVC()
 
     return svm_classifier
+
+
+def create_confusion_matrix(names, score_res):
+    matrix = {name: {second_name: 0 for second_name in names} for name in names}
+    for i in xrange(len(score_res['y_true'])):
+        matrix[score_res['y_true'][i]][score_res['y_predict'][i]] += 1
+    return {'score': score_res['score'], 'matrix': matrix}
 
 
 class SVMClassifierBuilder:
@@ -48,7 +53,7 @@ class SVMClassifierBuilder:
             y_predict.append(prediction)
         print correct
         print len(X_test)
-        return {'score': float(len(X_test)) / float(correct),
+        return {'score': float(correct) / float(len(X_test)),
                 'y_true': y_test,
                 'y_predict': y_predict}
 
@@ -98,6 +103,7 @@ class SVMClassifierBuilder:
             print 'One or more collections does not exist!'
             return
 
+        collections.sort()
         model_name = '~'.join(collections)
         print 'Started building model: {}. \nParams:\n train_size: {}, number_of_cluster: {}, type: {}, kernel_type: {}'.format(
             model_name, str(
@@ -123,9 +129,9 @@ class SVMClassifierBuilder:
             collection_labels = [collection for x in collection_histograms]
 
             train_quantity = int(math.floor(len(collection_histograms) * train_percentage))
-            X_train.extend(collection_histograms[:train_quantity])
+            X_train.extend(list(collection_histograms)[:train_quantity])
             y_train.extend(collection_labels[:train_quantity])
-            X_test.extend(collection_histograms[train_quantity:])
+            X_test.extend(list(collection_histograms)[train_quantity:])
             y_test.extend(collection_labels[train_quantity:])
 
             data.extend(collection_histograms)
@@ -149,6 +155,7 @@ class SVMClassifierBuilder:
 
         print "The mean score for this test was: %f" % model_score_result['score']
         print svm_classifier.score(X_test, y_test)
+        return create_confusion_matrix(collections, model_score_result)
 
 
 if __name__ == '__main__':

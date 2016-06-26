@@ -7,7 +7,9 @@
 		function ApiModelsService($http, $location){
             var baseUrl = 'http://' + $location.host() + ':' + $location.port() + '/api/models'
             var service = {
-                CreateModel: createModel
+                CreateModel: createModel,
+                GetModels: getModels,
+                DeleteModel: deleteModel
             }
 
             return service;
@@ -18,6 +20,20 @@
                     method: 'POST',
                     url: baseUrl + '/'
                 });
+            }
+
+            function getModels(){
+                return $http({
+                    method: 'GET',
+                    url: baseUrl + '/'
+                });
+            }
+
+            function deleteModel(id){
+                return $http({
+                    url: baseUrl + '/' + id,
+                    method: 'DELETE'
+                })
             }
 		}
 
