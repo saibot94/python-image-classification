@@ -23,24 +23,29 @@ class FeatureExtractor:
 
         return desc
 
-    def extract_features_from_collection(self, collection_items):
+    def extract_features_from_collection(self, collection_items, async=False):
         """
         Takes an iterable of item paths and returns the full array of SIFT descriptors
         for them.
 
         For efficiency, the extraction is performed with a thread pool
         """
-        pool = ThreadPool(processes=10)
-        async_results = deque()
 
         q = deque()
-        for item in collection_items:
-            async_results.append(pool.apply_async(self.perform_sift, (item,)))
+        if async:
+            pool = ThreadPool(processes=10)
+            async_results = deque()
 
-        for result in async_results:
-            async_response = result.get()
-            if async_response is not None:
-                q.extend(async_response)
+            for item in collection_items:
+                async_results.append(pool.apply_async(self.perform_sift, (item,)))
+
+            for result in async_results:
+                async_response = result.get()
+                if async_response is not None:
+                    q.extend(async_response)
+        else:
+            for item in collection_items:
+                q.extend(self.perform_sift(item))
         return q
 
     def extract_histograms_from_features(self, classifier, images, nr_of_bins=50):

@@ -2,7 +2,7 @@
     angular.module('SrcApp')
         .controller('CollectionsController', CollectionsController);
 
-    CollectionsController.$inject = ['ApiCollectionsService']
+    CollectionsController.$inject = ['ApiCollectionsService'];
     function CollectionsController(ApiCollectionsService){
         var vm = this;
         vm.collapsed = [];
@@ -44,6 +44,7 @@
 
             ApiCollectionsService.CreateCollection(name, query, nrResults).then(function(res){
                 console.log(res);
+                vm.showLoadingGif = false;
                 getCollections();
             });
 

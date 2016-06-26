@@ -18,9 +18,14 @@
             controller: 'CollectionsController',
             controllerAs: 'vm'
           }).
+          when('/build_phase_2', {
+            templateUrl: 'templates/build_phase_2.html',
+            controller: 'BuildModelController',
+            controllerAs: 'vm'
+          }).
           when('/', {
             templateUrl: 'templates/build.html',
-            controller: 'BuildModelController',
+            controller: 'BuildMainController',
             controllerAs: 'vm'
           }).
           otherwise({

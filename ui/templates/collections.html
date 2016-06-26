@@ -6,6 +6,10 @@
             <div class="col-md-10 col-md-push-1">
                 <h2>Collections</h2>
                 <hr>
+                <p>Here you can filter collections for unsuitable data, just click on the X icon that appears above
+                    every image in order to have it removed. You can also delete an entire collection and create a new
+                    one. Creating a new collection, you have to specify the search query for the search engine, as well.
+                </p>
             </div>
             <div class="col-md-10 col-md-push-1">
                 <div ng-repeat="collection in vm.collections">
@@ -59,5 +63,19 @@
                 </form>
             </div>
         </div>
+        <div class="row">
+            <hr>
+            <div class="col-md-10 col-md-push-1">
+                <div style="display: inline" class="pull-right">
+                    <a href="#/build_phase_2" class="btn btn-default button-link">Next step <span
+                            class="glyphicon glyphicon-arrow-right"></span></a>
+                </div>
+                <div style="display: inline" class="pull-left">
+                    <a href="#/build" class="btn btn-default button-link"> <span
+                            class="glyphicon glyphicon-arrow-left"></span> Previous step</a>
+                </div>
+            </div>
+        </div>
     </div>
+</div>
 </div>

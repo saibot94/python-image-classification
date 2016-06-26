@@ -48,6 +48,8 @@
 
 
 
+
+
     </style>
 </head>
 <body>
@@ -68,12 +70,6 @@
                     <a href="#/"><span
                             class="glyphicon glyphicon-map-marker pull-left"></span>
                         <div ng-if="!sidebar.bar.collapsed">Build</div>
-                    </a>
-                </li>
-                <li ng-class="sidebar.getActive('/collections')">
-                    <a href="#/collections"><span
-                            class="glyphicon glyphicon-signal pull-left"></span>
-                        <div ng-if="!sidebar.bar.collapsed">Collections</div>
                     </a>
                 </li>
                 <li ng-class="sidebar.getActive('/models')">
@@ -107,7 +103,9 @@
 <script src="app/app.js"></script>
 
 <script src="app/ApiCollectionsService.js"></script>
+<script src="app/ApiModelsService.js"></script>
 
+<script src="app/BuildMainController.js"></script>
 <script src="app/BuildModelController.js"></script>
 <script src="app/CollectionsController.js"></script>
 <script src="app/ModelsController.js"></script>

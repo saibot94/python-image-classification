@@ -142,6 +142,15 @@ class DAL:
         else:
             self.create_classifier_type(clf_type)
 
+    def get_all_classifiers(self, clf_type):
+        self._create_classifiers_if_not_exists()
+        id = self.get_classifier_type_id(clf_type)
+        if id is not None:
+            query_res = self.execute_query('select * from classifiers where classifier_type_id=' + str(id))
+            return query_res
+        else:
+            self.create_classifier_type(clf_type)
+
     def create_classifier_type(self, clf_type):
         self.execute_query('insert into classifier_types(name) values ("' + clf_type + '")')
 

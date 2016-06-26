@@ -1,0 +1,81 @@
+<img src="img/loading.gif" alt="Loading..." ng-show="vm.showLoadingGif"
+     class="loading-spinner">
+<div class="row">
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 col-md-push-1">
+                <h2>Build models</h2>
+                <h3>Step 2: Choosing the collections from which to build a model and the parameters</h3>
+                <hr>
+            </div>
+        </div>
+        <form class="form" role="form" ng-submit="vm.buildModel()">
+
+            <div class="row">
+                <div class="col-md-10 col-md-push-1">
+                    <h4><b>Choose collections to include in the model</b></h4>
+                    <p>Available collections:</p>
+                    <div ng-repeat="collection in vm.collections">
+                        <div class="collection-border">
+                            <div class="collection-checkbox pull-left">
+                                Select:
+                                <md-checkbox ng-model="collection.selected" aria-label="Select collection">
+
+                                </md-checkbox>
+                            </div>
+                            <h4 style="text-align: center;">
+                                {{collection.name}}
+                            </h4>
+
+                        </div>
+                        <div style="height: 15px;"></div>
+                    </div>
+                    <hr>
+                </div>
+                <div class="col-md-10 col-md-push-1">
+                    <h4><b>Choose parameters for the model</b></h4>
+                    <div class="form-group">
+                        <md-radio-group ng-model="vm.modelRequest.type" class="md-primary">
+                            <md-radio-button ng-repeat="d in vm.radioData"
+                                             ng-value="d.value"
+                                             ng-disabled=" d.isDisabled "
+                                             ng-class="{'md-align-top-left': $index==1}">
+                                {{ d.label }}<br/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="nrclusters">Number of clusters to create for the classifier:</label>
+                        <input id="nrclusters" ng-model="vm.modelRequest.clusters" class="form-control"
+                               type="number">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="trainperc">Percentage of data to be used as training data (range: [0 - 1]):</label>
+                        <input id="trainperc" ng-model="vm.modelRequest.trainPercentage" class="form-control"
+                               type="text">
+                    </div>
+
+                </div>
+            </div>
+
+
+            <br>
+            <div class="row">
+                <hr>
+                <div class="col-md-10 col-md-push-1">
+                    <div style="display: inline" class="pull-right">
+                        <button class="btn btn-primary button-link btn-lg"> <span
+                                class="glyphicon glyphicon-arrow-right"></span> Build model
+                        </button>
+                    </div>
+                    <div style="display: inline" class="pull-left">
+                        <a href="#/collections" class="btn btn-default button-link">Previous step <span
+                                class="glyphicon glyphicon-arrow-left"></span></a>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
