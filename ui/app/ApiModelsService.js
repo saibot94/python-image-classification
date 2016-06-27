@@ -9,7 +9,8 @@
             var service = {
                 CreateModel: createModel,
                 GetModels: getModels,
-                DeleteModel: deleteModel
+                DeleteModel: deleteModel,
+                BaseUrl: baseUrl
             }
 
             return service;

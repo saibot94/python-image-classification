@@ -1,8 +1,8 @@
 (function() {
 	'use strict';
 
-	var app = angular.module('SrcApp', ['nvd3', 'ui.bootstrap', 'ngRoute',
-	 'ngAnimate', 'ngMaterial', 'ngAria', 'rzModule'])
+        var app = angular.module('SrcApp', ['nvd3', 'ui.bootstrap', 'ngRoute',
+	 'ngAnimate', 'ngMaterial', 'ngAria', 'rzModule', 'angularFileUpload'])
 
 
 	app.config(['$routeProvider',

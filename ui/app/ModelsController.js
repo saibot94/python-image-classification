@@ -2,13 +2,20 @@
     angular.module('SrcApp')
         .controller('ModelsController', ModelsController);
 
-    ModelsController.$inject = ['ApiModelsService'];
-    function ModelsController(ApiModelsService){
+    ModelsController.$inject = ['ApiModelsService', 'FileUploader', '$location'];
+    function ModelsController(ApiModelsService, FileUploader){
         var vm = this;
-        vm.showLoadingGif = false;
+        var baseUrl = ApiModelsService.BaseUrl;
+
+        vm.showLoadingGif = true;
+        vm.selectedModelName = null;
+        vm.classificationResults = null;
         vm.classifiers = [];
 
+
+
         getModels();
+        createUploader();
 
         // Implementation below
         function getModels(){
@@ -33,6 +40,62 @@
 
             });
         }
+
+        function createUploader(){
+            vm.uploader = new FileUploader({
+             url: getFileUrl()
+            });
+
+            console.log(vm.uploader.url);
+
+            vm.uploader.filters.push({
+                name: 'imageFilter',
+                fn: function(item /*{File|FileLikeObject}*/, options) {
+                    var type = '|' + item.type.slice(item.type.lastIndexOf('/') + 1) + '|';
+                    return '|jpg|png|jpeg|bmp|gif|'.indexOf(type) !== -1;
+                }
+            });
+
+            vm.uploader.onCompleteItem = handleCompletion;
+            vm.showLoadingGif = false;
+        }
+
+        vm.changeSelection = function(){
+            vm.uploader.clearQueue();
+
+            changeUploaderUrl();
+        }
+
+        vm.uploadFile = function(item){
+            vm.classificationResults = null;
+            vm.showLoadingGif = true;
+            item.upload();
+        }
+
+        function getFileUrl(){
+          var fileUrl = null;
+            if(vm.selectedModelName != null){
+                fileUrl =  baseUrl + '/classify/' + vm.selectedModelName;
+            }
+            else{
+                fileUrl =  baseUrl + '/classify';
+            }
+           return fileUrl;
+        }
+
+
+        function changeUploaderUrl(){
+            vm.classificationResults = null;
+            vm.uploader.url = getFileUrl();
+        }
+
+
+        function handleCompletion(fileItem, response, status, headers) {
+                 vm.classificationResults = response.prediction;
+                 console.log(vm.classificationResults);
+                 vm.showLoadingGif = false;
+                 vm.uploader.clearQueue();
+        };
 
     }
 })();

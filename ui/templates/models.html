@@ -10,16 +10,59 @@
                 <hr>
             </div>
             <div class="col-md-10 col-md-push-1">
-                <div ng-repeat="model in vm.models">
-                    <div class="collection-border" style="width: 100%; height: 40px;margin-bottom: 10px;">
+                <p>Select one of the models below with the radio boxes in order to use them for classification</p>
+
+                <form name="model-selection-form">
+                    <div ng-repeat="model in vm.models">
+                        <div class="collection-border" style="width: 100%; height: 40px;margin-bottom: 10px;">
+                            <label class="use-radio-button-models">
+                                Use
+                                <input type="radio" ng-change="vm.changeSelection()" ng-model="vm.selectedModelName"
+                                       ng-value="model.name">
+                            </label>
                         <span style="padding: 10px;"><b>{{model.name}}</b>
                                 <button class="btn btn-danger pull-right" ng-click="vm.deleteModel(model.name)">
                                     Delete model
                                 </button>
                         </span>
 
-                    </div>
+                        </div>
 
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-10 col-md-push-1">
+                <h3>Choose file to upload</h3>
+                <input type="file" class="form-input" nv-file-select uploader="vm.uploader"/><br/>
+                <div ng-repeat="item in vm.uploader.queue">
+
+                    <div style="margin: 10px; " ng-show="vm.uploader.isHTML5"
+                         ng-thumb="{ file: item._file, height: 150 }"></div>
+
+                    <button type="button" class="btn btn-success btn-lg"
+                            ng-click="vm.uploadFile(item)"
+                            ng-disabled="item.isReady || item.isUploading || item.isSuccess || vm.selectedModelName == null">
+                        <span class="glyphicon glyphicon-upload"></span> Upload
+                    </button>
+                </div>
+                <p class="bg-success" ng-if="vm.classificationResults != null">
+                    Classification done!
+                </p>
+                <hr>
+                <!--<button class="btn btn-primary btn-lg" ng-click="vm.uploader.upload()"-->
+                <!--ng-disabled="vm.selectedModelName == null">Classify-->
+                <!--</button>-->
+            </div>
+            <div class="col-md-10 col-md-push-1" ng-show="vm.classificationResults != null">
+                <h3>Results:</h3>
+                <p>The predicted class is:</p>
+                <p class="bg-info">{{vm.classificationResults.class}}</p>
+                <hr>
+                <div ng-if="vm.classificationResults.probability">
+                    <p><b>Probabilities:</b></p>
+                    <div ng-repeat="probItem in vm.classificationResults.probability">
+                        "{{probItem[0]}}" = {{probItem[1] * 100 | number: 3}}%
+                    </div>
                 </div>
             </div>
         </div>

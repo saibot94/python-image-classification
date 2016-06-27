@@ -48,7 +48,7 @@ class FeatureExtractor:
                 q.extend(self.perform_sift(item))
         return q
 
-    def extract_histograms_from_features(self, classifier, images, nr_of_bins=50):
+    def extract_histograms_from_images(self, classifier, images, nr_of_bins=50):
         zrs = collections.deque()
         for image in images:
             image = self.perform_sift(image)

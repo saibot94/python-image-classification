@@ -123,7 +123,7 @@ class SVMClassifierBuilder:
         for collection in collections:
             collection_items = self.dal.get_items_in_collection(collection)
             collection_histograms = \
-                self.feature_extractor.extract_histograms_from_features(k_means_clf,
+                self.feature_extractor.extract_histograms_from_images(k_means_clf,
                                                                         collection_items,
                                                                         nr_of_bins=number_of_clusters)
             collection_labels = [collection for x in collection_histograms]
