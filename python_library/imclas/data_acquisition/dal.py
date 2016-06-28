@@ -9,6 +9,7 @@ class DAL:
     def __init__(self, db_location=conf.DEFAULT_DB_LOCATION):
         self.db_location = db_location
         self.conn = self.init_connection()
+	self.create_image_collection()
 
     def init_connection(self):
         return sqlite3.connect(self.db_location)
@@ -171,7 +172,7 @@ class DAL:
 
         # Now create the file for the model and save it in the db
         type_id = self.get_classifier_type_id(clf_type)
-        model_path = conf.MODELS_DIR + '\\' + model_name + '_' + clf_type + '.model'
+        model_path = conf.MODELS_DIR + os.path.sep  + model_name + '_' + clf_type + '.model'
         with open(model_path, 'w') as f:
             cPickle.dump(clf_object, f)
 

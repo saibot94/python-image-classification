@@ -42,14 +42,14 @@ class ImageCollector:
         ImageCollector._do_parallel_download(
             {'chunk': chunk,
              'col_name': collection_name,
-             'path': conf.COLLECTIONS_DIR + '\\' + collection_name + '\\',
+             'path': conf.COLLECTIONS_DIR + os.path.sep + collection_name + os.path.sep,
              'image_nr': image_nr})
 
     def download_all(self, urls, collection_name):
         """
         Given a list of image urls, download them to the disk and add them to the database
         """
-        sys_collection_path = conf.COLLECTIONS_DIR + '\\' + collection_name
+        sys_collection_path = conf.COLLECTIONS_DIR + os.path.sep  + collection_name
         if not os.path.exists(sys_collection_path):
             os.makedirs(sys_collection_path)
         try:
