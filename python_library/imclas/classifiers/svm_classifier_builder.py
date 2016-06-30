@@ -70,8 +70,17 @@ class SVMClassifierBuilder:
 
         return k_means_clf
 
+    def get_max_samples(self, collections):
+        min_len = None
+        for collection in collections:
+            collection_items = self.dal.get_items_in_collection(collection)
+            if min_len is None or min_len > len(collection_items):
+                min_len = len(collection_items)
+
+        return min_len
+
     def build_model(self, collections, number_of_clusters=50, train_percentage=0.5, svm_type='svc',
-                    kernel_type='precomputed', svm_gamma='auto'):
+                    kernel_type='precomputed', svm_gamma='auto', limit=False):
         """
         This function creates the KMeans classifier and
         SVM classifiers (afterwards).
@@ -120,12 +129,15 @@ class SVMClassifierBuilder:
         data = []
         labels = []
         X_train, y_train, X_test, y_test = [], [], [], []
+        samples_to_take = self.get_max_samples(collections)
         for collection in collections:
             collection_items = self.dal.get_items_in_collection(collection)
+            if not limit:
+                samples_to_take = len(collection_items)
             collection_histograms = \
                 self.feature_extractor.extract_histograms_from_images(k_means_clf,
-                                                                        collection_items,
-                                                                        nr_of_bins=number_of_clusters)
+                                                                      collection_items[:samples_to_take],
+                                                                      nr_of_bins=number_of_clusters)
             collection_labels = [collection for x in collection_histograms]
 
             train_quantity = int(math.floor(len(collection_histograms) * train_percentage))
@@ -155,7 +167,10 @@ class SVMClassifierBuilder:
 
         print "The mean score for this test was: %f" % model_score_result['score']
         print svm_classifier.score(X_test, y_test)
-        return create_confusion_matrix(collections, model_score_result)
+
+        model_stats = create_confusion_matrix(collections, model_score_result)
+
+        self.dal.add_stats_for_model(model_stats, model_name)
 
 
 if __name__ == '__main__':

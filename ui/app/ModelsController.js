@@ -3,7 +3,7 @@
         .controller('ModelsController', ModelsController);
 
     ModelsController.$inject = ['ApiModelsService', 'FileUploader', '$location'];
-    function ModelsController(ApiModelsService, FileUploader){
+    function ModelsController(ApiModelsService, FileUploader, $location){
         var vm = this;
         var baseUrl = ApiModelsService.BaseUrl;
 
@@ -70,6 +70,10 @@
             vm.classificationResults = null;
             vm.showLoadingGif = true;
             item.upload();
+        }
+
+        vm.goToStats = function(modelName){
+            $location.path('/models/' + modelName);
         }
 
         function getFileUrl(){

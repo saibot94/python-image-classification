@@ -9,7 +9,7 @@ class DAL:
     def __init__(self, db_location=conf.DEFAULT_DB_LOCATION):
         self.db_location = db_location
         self.conn = self.init_connection()
-	self.create_image_collection()
+        self.create_image_collection()
 
     def init_connection(self):
         return sqlite3.connect(self.db_location)
@@ -63,6 +63,28 @@ class DAL:
                                 collection_name  TEXT NOT NULL )')
         self.execute_query('create table if not exists collection_items (collection_id INTEGER NOT NULL, \
                             item_path TEXT NOT NULL PRIMARY KEY, FOREIGN KEY(collection_id) REFERENCES collection(id))')
+        self.execute_query(
+            'create table if not exists statistics (model_name TEXT PRIMARY KEY, path TEXT NOT NULL)')
+
+    def add_stats_for_model(self, stats_object, model_name):
+        model_path = conf.MODELS_DIR + os.path.sep + model_name + '.statistics'
+        with open(model_path, 'w') as f:
+            cPickle.dump(stats_object, f)
+        self.execute_query(
+            'insert into statistics(model_name, path) values("' + model_name + '", "' + model_path + '")')
+
+    def remove_stats_for_model(self, model_name):
+        model_path = conf.MODELS_DIR + os.path.sep + model_name + '.statistics'
+        if os.path.exists(model_path):
+            os.remove(model_path)
+        self.execute_query('delete from statistics where model_name="' + model_name + '"')
+
+    def get_stats_object(self, model_name):
+        object_path = self.execute_query('select path from statistics where model_name="' + model_name + '"')[0]
+        if os.path.exists(object_path):
+            with open(object_path, 'r') as f:
+                return cPickle.load(f)
+        return None
 
     def remove_collection_item(self, item_name):
         self.execute_query('delete from collection_items where item_path="' + item_name + '"')
@@ -162,6 +184,7 @@ class DAL:
                 os.remove(clf[2])
             self.execute_query('delete from classifiers where name="' + model_name + '" \
                                     and classifier_type_id=' + str(clf[3]))
+            self.remove_stats_for_model(model_name)
             return 'OK'
 
     def persist_classifier(self, clf_object, model_name, clf_type):
@@ -172,7 +195,7 @@ class DAL:
 
         # Now create the file for the model and save it in the db
         type_id = self.get_classifier_type_id(clf_type)
-        model_path = conf.MODELS_DIR + os.path.sep  + model_name + '_' + clf_type + '.model'
+        model_path = conf.MODELS_DIR + os.path.sep + model_name + '_' + clf_type + '.model'
         with open(model_path, 'w') as f:
             cPickle.dump(clf_object, f)
 

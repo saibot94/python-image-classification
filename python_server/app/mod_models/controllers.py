@@ -3,7 +3,6 @@ from werkzeug.utils import secure_filename
 from imclas.data_acquisition import DAL
 from imclas.features import FeatureExtractor
 from app import config
-import cv2
 
 from imclas.classifiers import SVMClassifierBuilder
 import os
@@ -34,7 +33,8 @@ def get_models():
         result = svm_builder.build_model(collections=model_object['collections'],
                                          number_of_clusters=model_object['clusters'],
                                          train_percentage=float(model_object['trainPercentage']),
-                                         svm_type=model_object['type'])
+                                         svm_type=model_object['type'],
+                                         limit=model_object['limit'])
 
         return jsonify(result=result)
 

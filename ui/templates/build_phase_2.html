@@ -56,6 +56,17 @@
                                type="text">
                     </div>
 
+
+                    <div class="form-group">
+                        <label for="trainperc">Limit the training / test data (take the smallest number for equal training amounts):</label>
+                            <md-radio-group ng-model="vm.modelRequest.limit" class="md-primary">
+                            <md-radio-button ng-repeat="d in vm.radioData2"
+                                             ng-value="d.value"
+                                             ng-disabled=" d.isDisabled "
+                                             ng-class="{'md-align-top-left': $index==1}">
+                                {{ d.label }}<br/>
+                    </div>
+
                 </div>
             </div>
 

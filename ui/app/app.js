@@ -13,6 +13,11 @@
             controller: 'ModelsController',
             controllerAs: 'vm'
           }).
+          when('/models/:modelName', {
+            templateUrl: 'templates/modelstats.html',
+            controller: 'ModelStatsController',
+            controllerAs: 'vm'
+          }).
           when('/collections', {
             templateUrl: 'templates/collections.html',
             controller: 'CollectionsController',

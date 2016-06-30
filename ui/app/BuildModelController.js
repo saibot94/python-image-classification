@@ -9,7 +9,8 @@
             type: 'svc',
             collections: [],
             clusters: 50,
-            trainPercentage: 0.5
+            trainPercentage: 0.5,
+            limit: false
         };
         vm.showLoadingGif = false;
         vm.collections = [];
@@ -17,6 +18,10 @@
                 { label: 'SVC', value: 'svc'},
                 { label: 'LinearSVC', value: 'linearsvc'},
          ];
+        vm.radioData2 = [
+            {label: 'True', value: true},
+            {label: 'False', value: false}
+        ];
 
 
 

@@ -20,7 +20,7 @@
                                   class="glyphicon glyphicon-chevron-right"></span>
                                 <span ng-if="!vm.collapsed[collection.name]"
                                       class="glyphicon glyphicon-chevron-down"></span>
-                                {{collection.name}}
+                                {{collection.name}} ({{collection.items.length}} items)
                             </span>
                             <button class="btn btn-danger pull-right" ng-click="vm.deleteCollection(collection.name)">
                                 Delete collection
