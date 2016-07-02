@@ -10,6 +10,7 @@
                 CreateModel: createModel,
                 GetModels: getModels,
                 DeleteModel: deleteModel,
+                GetStats: getStats,
                 BaseUrl: baseUrl
             }
 
@@ -34,6 +35,13 @@
                 return $http({
                     url: baseUrl + '/' + id,
                     method: 'DELETE'
+                })
+            }
+
+            function getStats(name){
+                return $http({
+                    url: baseUrl + '/stats/' + encodeURIComponent(name),
+                    method: 'GET'
                 })
             }
 		}

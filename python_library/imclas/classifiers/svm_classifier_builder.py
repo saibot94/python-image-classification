@@ -60,10 +60,12 @@ class SVMClassifierBuilder:
     def _build_kmeans_classifier(self, number_of_clusters, collections, model_name):
         collection_features = deque()
         for collection in collections:
+            print "===>> Collecting features from collection: {}".format(collection)
             collection_items = self.dal.get_items_in_collection(collection)
             collection_features.extend(self.feature_extractor.extract_features_from_collection(collection_items))
 
-        k_means_clf = KMeans(n_clusters=number_of_clusters)
+        print "===>> Building actual kmeans classifier with {} clusters".format(number_of_clusters)
+        k_means_clf = KMeans(n_jobs=-1, n_clusters=number_of_clusters)
         k_means_clf.fit(list(collection_features))
 
         self.dal.persist_classifier(k_means_clf, model_name, 'kmeans')
@@ -99,6 +101,8 @@ class SVMClassifierBuilder:
         train_percentage : The amount of data in the set to be used for training
 
         svm_gamma: The gamma parameter for the SVC, if not specified it's 'auto'
+
+        limit: whether to limit the classifier's train - test data choice or not
         """
 
         if len(collections) < 2:
@@ -175,4 +179,6 @@ class SVMClassifierBuilder:
 
 if __name__ == '__main__':
     svm = SVMClassifierBuilder()
-    svm.build_model(['stop signs', 'no left turn signs'], train_percentage=0.6)
+    svm.build_model(
+        ['no left turn signs', 'no parking traffic signs', 'pedestrian crossing signs', 'road work signs', 'stop signs',
+         'yield traffic signs'], train_percentage=0.8, number_of_clusters=500)

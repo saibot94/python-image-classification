@@ -104,3 +104,13 @@ def upload_image_for_classification(model_name):
             return jsonify(prediction=classification_result)
         else:
             abort(400)
+
+
+@mod_models.route('/stats/<model_name>', methods=['GET'])
+def get_model_stats(model_name):
+    d = DAL()
+    model_stats = d.get_stats_object(model_name)
+    if model_stats:
+        return jsonify(model_stats)
+    else:
+        abort(404)

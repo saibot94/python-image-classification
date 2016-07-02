@@ -80,7 +80,7 @@ class DAL:
         self.execute_query('delete from statistics where model_name="' + model_name + '"')
 
     def get_stats_object(self, model_name):
-        object_path = self.execute_query('select path from statistics where model_name="' + model_name + '"')[0]
+        object_path = self.execute_query('select path from statistics where model_name="' + model_name + '"')[0][0]
         if os.path.exists(object_path):
             with open(object_path, 'r') as f:
                 return cPickle.load(f)

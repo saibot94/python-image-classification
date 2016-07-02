@@ -1,7 +1,32 @@
 <div class="container">
     <div class="row">
         <div class="col-md-10 col-md-push-1">
-            <h2></h2>
+            <h2>Classifier statistics</h2>
+            <p>Below, you can see the results of training the model for the classifier that identifies between the
+                following collections:</p>
+            <ol>
+                <li ng-repeat="component in vm.modelNameComponents">{{component}}</li>
+            </ol>
+            <hr>
+        </div>
+        <div class="col-md-10 col-md-push-1" ng-if="vm.stats != undefined">
+            <h3 style="color:#c12e2a">Accuracy: {{vm.stats.score * 100 | number: 3}}% </h3>
+            <h3 style="color:#c12e2a">Confusion matrix: </h3>
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th style="color:#c12e2a">Expected/Predicted</th>
+                    <th ng-repeat="key in vm.table.keys">{{key}}</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="key in vm.table.keys">
+                    <td><b>{{key}}</b></td>
+                    <td ng-repeat="columnKey in vm.table.keys">{{vm.stats.matrix[key][columnKey]}}</td>
+                </tr>
+                </tbody>
+
+            </table>
         </div>
     </div>
 </div>
