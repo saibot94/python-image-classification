@@ -10,6 +10,8 @@
         vm.table = {
             keys: []
         };
+        vm.showLoadingGif = true;
+
 
         function buildKeys(key, value){
             vm.table.keys.push(key);
@@ -30,6 +32,8 @@
             vm.stats = res.data;
             keyValueIteration(vm.stats.matrix, function(key, val){ console.log(key + '->'); console.log(val);});
             keyValueIteration(vm.stats.matrix, buildKeys);
+            vm.showLoadingGif = false;
+
         });
 
     }
