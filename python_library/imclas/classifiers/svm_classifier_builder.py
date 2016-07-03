@@ -65,14 +65,14 @@ class SVMClassifierBuilder:
             collection_features.extend(self.feature_extractor.extract_features_from_collection(collection_items))
 
         print "===>> Building actual kmeans classifier with {} clusters".format(number_of_clusters)
-        k_means_clf = KMeans(n_jobs=-1, n_clusters=number_of_clusters)
+        k_means_clf = KMeans(n_clusters=number_of_clusters)
         k_means_clf.fit(list(collection_features))
 
         self.dal.persist_classifier(k_means_clf, model_name, 'kmeans')
 
         return k_means_clf
 
-    def get_max_samples(self, collections):
+    def _get_max_samples(self, collections):
         min_len = None
         for collection in collections:
             collection_items = self.dal.get_items_in_collection(collection)
@@ -133,7 +133,7 @@ class SVMClassifierBuilder:
         data = []
         labels = []
         X_train, y_train, X_test, y_test = [], [], [], []
-        samples_to_take = self.get_max_samples(collections)
+        samples_to_take = self._get_max_samples(collections)
         for collection in collections:
             collection_items = self.dal.get_items_in_collection(collection)
             if not limit:

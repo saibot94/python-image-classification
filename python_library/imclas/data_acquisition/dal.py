@@ -64,7 +64,9 @@ class DAL:
         self.execute_query('create table if not exists collection_items (collection_id INTEGER NOT NULL, \
                             item_path TEXT NOT NULL PRIMARY KEY, FOREIGN KEY(collection_id) REFERENCES collection(id))')
         self.execute_query(
-            'create table if not exists statistics (model_name TEXT PRIMARY KEY, path TEXT NOT NULL)')
+            'create table if not exists statistics (id INTEGER PRIMARY KEY AUTOINCREMENT, \
+                    model_name TEXT NOT NULL, path TEXT NOT NULL, \
+                     FOREIGN KEY(model_name) REFERENCES classifiers(name)) )')
 
     def add_stats_for_model(self, stats_object, model_name):
         model_path = conf.MODELS_DIR + os.path.sep + model_name + '.statistics'

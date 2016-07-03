@@ -15,7 +15,7 @@ class CollectionManager:
             urls = self.image_collector.get_image_urls(query, nr_of_items)
             sys_collection_path = self.image_collector.download_all(urls, collection_name)
             if sys_collection_path:
-                self.add_paths_to_db(collection_path=sys_collection_path,
+                self._add_paths_to_db(collection_path=sys_collection_path,
                                      collection_name=collection_name)
 
         else:
@@ -35,7 +35,7 @@ class CollectionManager:
         else:
             raise Exception('Collection does not exist!')
 
-    def add_paths_to_db(self, collection_path, collection_name):
+    def _add_paths_to_db(self, collection_path, collection_name):
         for item in os.listdir(collection_path):
             full_path = collection_path + os.path.sep  + item
             self.dal.insert_path_for_collection(item_path=full_path,
