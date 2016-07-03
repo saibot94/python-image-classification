@@ -181,4 +181,4 @@ if __name__ == '__main__':
     svm = SVMClassifierBuilder()
     svm.build_model(
         ['no left turn signs', 'no parking traffic signs', 'pedestrian crossing signs', 'road work signs', 'stop signs',
-         'yield traffic signs'], train_percentage=0.8, number_of_clusters=500)
+         'yield traffic signs'], train_percentage=0.8, number_of_clusters=100)

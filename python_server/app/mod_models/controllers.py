@@ -71,7 +71,8 @@ def classify_image_path(model_name, image_path):
         svm_classifier = d.load_classifier_object(model_name, 'svm')
         if kmeans_classifier is not None and svm_classifier is not None:
             feature_extractor = FeatureExtractor()
-            image_histograms = feature_extractor.extract_histograms_from_images(kmeans_classifier, [image_path])
+            image_histograms = feature_extractor.extract_histograms_from_images(kmeans_classifier, [image_path],
+                                                                                nr_of_bins=kmeans_classifier.n_clusters)
             prediction = svm_classifier.predict([image_histograms[0]])
             print 'classified: {}'.format(str(prediction))
 
