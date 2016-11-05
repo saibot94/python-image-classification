@@ -8,6 +8,7 @@ def gaussian_blur(filename):
 
     plt.subplot(1, 2, 1), plt.imshow(gray), plt.title("Normal img")
     plt.subplot(1, 2, 2), plt.imshow(img), plt.title("Blurred image")
+    plt.show()
 
 
 if __name__ == '__main__':
