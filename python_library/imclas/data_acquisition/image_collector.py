@@ -1,8 +1,9 @@
 import requests, base64, urllib
 import collections
+import socket
 from imclas import configuration as conf
 from imclas.util import ImageUtils
-import urllib
+import urllib2
 import os
 from threading import Thread
 import cv2
@@ -12,6 +13,7 @@ from imclas.util import array_utils
 
 class ImageCollector:
     def __init__(self, api_key=conf.API_KEY, base_url=conf.SEARCH_SERVICE_BASE_URL):
+        socket.setdefaulttimeout(10)
         self.dal = DAL()
         self.api_key = api_key
         self.base_url = base_url
