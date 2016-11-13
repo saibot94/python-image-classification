@@ -18,7 +18,7 @@ class FeatureExtractor:
         """
 
         gray = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
-        sift = cv2.xfeatures2d.SIFT_create()
+        sift = cv2.SIFT()
         kp, desc = sift.detectAndCompute(gray, None)
 
         return desc

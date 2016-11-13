@@ -8,6 +8,10 @@ To run it, you need to export the variable:
 
 export FLASK_APP=run.py
 
+or
+
+set FLASK_APP=run.py
+
 After exporting it, you should be good to go.
 The UI is pluggable, from the library.
 

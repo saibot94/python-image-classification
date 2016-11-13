@@ -9,6 +9,7 @@ class DAL:
     def __init__(self, db_location=conf.DEFAULT_DB_LOCATION):
         self.db_location = db_location
         self.conn = self.init_connection()
+        self._create_classifiers_if_not_exists()
         self.create_image_collection()
 
     def init_connection(self):
@@ -66,7 +67,7 @@ class DAL:
         self.execute_query(
             'create table if not exists statistics (id INTEGER PRIMARY KEY AUTOINCREMENT, \
                     model_name TEXT NOT NULL, path TEXT NOT NULL, \
-                     FOREIGN KEY(model_name) REFERENCES classifiers(name)) )')
+                     FOREIGN KEY(model_name) REFERENCES classifiers(name))')
 
     def add_stats_for_model(self, stats_object, model_name):
         model_path = conf.MODELS_DIR + os.path.sep + model_name + '.statistics'
