@@ -270,3 +270,13 @@ text-align: center;
     padding-left: 20px;
     color: #c12e2a;
 }
+
+.success-well {
+    background-image: none;
+    background-color: #dff0d8;
+    margin-top: 20px;
+}
+.info-well {
+    background-image: none;
+    background-color: #d9edf7;
+}

@@ -10,6 +10,7 @@
         vm.showLoadingGif = true;
         vm.selectedModelName = null;
         vm.classificationResults = null;
+        vm.uploadDone = false;
         vm.classifiers = [];
 
 
@@ -64,6 +65,7 @@
             vm.uploader.clearQueue();
 
             changeUploaderUrl();
+            vm.uploadDone = false;
         }
 
         vm.uploadFile = function(item){
@@ -74,6 +76,12 @@
 
         vm.goToStats = function(modelName){
             $location.path('/models/' + modelName);
+        }
+
+        vm.clearUploader = function(){
+            vm.uploader.clearQueue();
+            vm.classificationResults = null;
+            vm.uploadDone = false;
         }
 
         function getFileUrl(){
@@ -98,7 +106,8 @@
                  vm.classificationResults = response.prediction;
                  console.log(vm.classificationResults);
                  vm.showLoadingGif = false;
-                 vm.uploader.clearQueue();
+                 vm.uploadDone = true;
+                 //vm.uploader.clearQueue();
         };
 
     }

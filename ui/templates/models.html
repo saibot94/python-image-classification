@@ -48,8 +48,15 @@
                 </form>
             </div>
             <div class="col-md-10 col-md-push-1">
-                <h3>Choose file to upload</h3>
-                <input type="file" class="form-input" nv-file-select uploader="vm.uploader"/><br/>
+                <div ng-if="vm.uploadDone == false">
+                    <h3>Choose file to upload</h3>
+                    <input type="file" class="form-input" nv-file-select uploader="vm.uploader"/><br/>
+                </div>
+                <div ng-if="vm.uploadDone==true" style="margin-bottom: 50px;clear: both;">
+                    <button type="button" class="btn btn-danger pull-left"
+                           ng-click="vm.clearUploader()">Clear item</button>
+                    <br>
+                </div>
                 <div ng-repeat="item in vm.uploader.queue">
 
                     <div style="margin: 10px; " ng-show="vm.uploader.isHTML5"
@@ -57,22 +64,27 @@
 
                     <button type="button" class="btn btn-success btn-lg"
                             ng-click="vm.uploadFile(item)"
-                            ng-disabled="item.isReady || item.isUploading || item.isSuccess || vm.selectedModelName == null">
+                            ng-disabled="item.isReady || item.isUploading || vm.uploadDone
+                                || vm.selectedModelName == null">
                         <span class="glyphicon glyphicon-upload"></span> Upload
                     </button>
                 </div>
-                <p class="bg-success" ng-if="vm.classificationResults != null">
-                    Classification done!
-                </p>
+                <div class="well well-sm success-well" ng-if="vm.classificationResults != null">
+                    <p>
+                        <b>Classification done!</b>
+                    </p>
+                </div>
                 <hr>
                 <!--<button class="btn btn-primary btn-lg" ng-click="vm.uploader.upload()"-->
                 <!--ng-disabled="vm.selectedModelName == null">Classify-->
                 <!--</button>-->
             </div>
             <div class="col-md-10 col-md-push-1" ng-show="vm.classificationResults != null">
-                <h3>Results:</h3>
+                <h3>Results</h3>
                 <p>The predicted class is:</p>
-                <p class="bg-info">{{vm.classificationResults.class}}</p>
+                <div class="well well-sm info-well">
+                    <p><b>{{vm.classificationResults.class}}</b></p>
+                </div>
                 <hr>
                 <div ng-if="vm.classificationResults.probability">
                     <p><b>Probabilities:</b></p>
