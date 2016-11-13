@@ -48,7 +48,7 @@
                 </form>
             </div>
             <div class="col-md-10 col-md-push-1">
-                <div ng-if="vm.uploadDone == false">
+                <div ng-if="vm.uploadDone == false && vm.selectedModelName != null">
                     <h3>Choose file to upload</h3>
                     <input type="file" class="form-input" nv-file-select uploader="vm.uploader"/><br/>
                 </div>
@@ -64,8 +64,7 @@
 
                     <button type="button" class="btn btn-success btn-lg"
                             ng-click="vm.uploadFile(item)"
-                            ng-disabled="item.isReady || item.isUploading || vm.uploadDone
-                                || vm.selectedModelName == null">
+                            ng-disabled="item.isReady || item.isUploading || vm.uploadDone">
                         <span class="glyphicon glyphicon-upload"></span> Upload
                     </button>
                 </div>
